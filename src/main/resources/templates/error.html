@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Errore</title>
+</head>
+<body>
+<h2 style="color: red;">Errore nella creazione del Timesheet</h2>
+<p id="error" th:text="${errorMessage}">Si è verificato un errore.</p>
+<br>
+<a href="/list">Torna alla pagina principale</a>
+</body>
+</html>

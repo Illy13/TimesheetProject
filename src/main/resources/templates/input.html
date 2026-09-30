@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuovo Timesheet</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 5px;
+            text-align: center;
+        }
+        th {
+            background-color: #0073e6;
+            color: white;
+        }
+        input[type="text"], input[type="number"], input[type="date"] {
+            width: 100%;
+            padding: 5px;
+            box-sizing: border-box;
+        }
+    </style>
+
+
+</head>
+<body>
+<div class="container">
+    <h2>Nuovo Timesheet</h2>
+    <form action="/create" method="post">
+        <label>Nome Lavoratore:</label>
+        <input type="text" id="ricercatore" name="nomeLavoratore" required>
+
+        <label>Codice Fiscale:</label>
+        <input type="text" id="CF" name="codiceFiscale" required>
+
+        <label>Nome Progetto:</label>
+        <input type="text" id="nomeProgetto" name="nomeProgetto" required>
+
+        <h3>Attività</h3>
+        <table>
+            <thead>
+            <tr>
+                <th>Nome Attività</th>
+                <th>Data</th>
+                <th>Ore Lavorate</th>
+            </tr>
+            </thead>
+            <tbody id="activityTable">
+            <tr>
+                <td>
+                    <input type="text" name="attivitaNomi" placeholder="Nome Attività" required>
+                </td>
+                <td>
+                    <input type="date" name="attivitaDate" required>
+                </td>
+                <td>
+                    <input type="number" name="attivitaOre" min="0" max="8" required>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <br><br>
+        <input type="submit" value="Salva Timesheet">
+    </form>
+    <br>
+    <a href="/list">Visualizza Timesheet</a>
+</div>
+</body>
+</html>

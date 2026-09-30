@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Foglio Ore</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    .container {
+      max-width: 100%;
+      margin: auto;
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 5px;
+      text-align: center;
+      font-size: 12px;
+    }
+    th {
+      background-color: #0073e6;
+      color: white;
+    }
+    .activity-column {
+      text-align: left;
+      width: 500px; /* Aumentato per la colonna Attività */
+    }
+    input[type="text"], input[type="number"], input[type="date"] {
+      width: 100%;
+      border: none;
+      text-align: center;
+      padding: 3px;
+      box-sizing: border-box;
+      font-size: 12px;
+    }
+    .hour-input {
+      width: 40px;
+      min-width: 40px;
+      min-height: 25px;
+      text-align: center;
+      background-color: white;
+      color: black;
+      font-size: 12px;
+    }
+    td input {
+      padding: 3px;
+    }
+    .add-row-btn {
+      margin-top: 10px;
+      padding: 5px 10px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    .add-row-btn:hover {
+      background-color: #45a049;
+    }
+  </style>
+  <script>
+    function updateDays() {
+      const dateInput = document.getElementById("date").value;
+      const date = new Date(dateInput);
+      const year = date.getFullYear();
+      const month = date.getMonth();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+      let headerRow = "<th>Attività</th>";
+      for (let i = 1; i <= daysInMonth; i++) {
+        const day = new Date(year, month, i).getDay();
+        const isWeekend = (day === 0 || day === 6);
+        headerRow += `<th ${isWeekend ? 'style="background-color: #ddd;"' : ''}>${i}</th>`;
+      }
+      headerRow += "<th>Totale Ore</th>";
+      document.getElementById("table-header").innerHTML = headerRow;
+
+      document.querySelectorAll(".hours-row").forEach(row => {
+        let rowContent = "<td class='activity-column'><input type='text' placeholder='Inserisci attività'></td>";
+        for (let i = 1; i <= daysInMonth; i++) {
+          const day = new Date(year, month, i).getDay();
+          const isWeekend = (day === 0 || day === 6);
+          rowContent += `<td><input type='number' class='hour-input' min='0' max='8' ${isWeekend ? 'disabled' : ''} onchange='calculateTotal(this)'></td>`;
+        }
+        rowContent += "<td class='total-hours'>0</td>";
+        row.innerHTML = rowContent;
+      });
+    }
+
+    function calculateTotal(input) {
+      let row = input.parentElement.parentElement;
+      let total = 0;
+      let columnIndex = [...input.parentElement.parentElement.children].indexOf(input.parentElement);
+      let dayTotal = 0;
+      document.querySelectorAll(`.hours-row td:nth-child(${columnIndex + 1}) input`).forEach(cell => {
+        dayTotal += Number(cell.value) || 0;
+      });
+
+      if (dayTotal > 8 || (dayTotal > 0 && dayTotal < 1)) {
+        alert(`Errore: le ore del giorno devono essere tra 1 e 8. Reinserire i valori.`);
+        document.querySelectorAll(`.hours-row td:nth-child(${columnIndex + 1}) input`).forEach(cell => {
+          cell.value = "";
+        });
+        dayTotal = 0;
+      }
+
+      row.querySelectorAll(".hour-input").forEach(cell => {
+        total += Number(cell.value) || 0;
+      });
+      row.querySelector(".total-hours").innerText = total;
+    }
+
+    // Funzione per aggiungere una nuova riga alla tabella
+    function addNewRow() {
+      const dateInput = document.getElementById("date").value;
+      const date = new Date(dateInput);
+      const year = date.getFullYear();
+      const month = date.getMonth();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+      const newRow = document.createElement("tr");
+      let rowContent = "<td class='activity-column'><input type='text' placeholder='Inserisci attività'></td>";
+
+      for (let i = 1; i <= daysInMonth; i++) {
+        const day = new Date(year, month, i).getDay();
+        const isWeekend = (day === 0 || day === 6);
+        rowContent += `<td><input type='number' class='hour-input' min='0' max='8' ${isWeekend ? 'disabled' : ''} onchange='calculateTotal(this)'></td>`;
+      }
+
+      rowContent += "<td class='total-hours'>0</td>";
+      newRow.innerHTML = rowContent;
+      document.querySelector("tbody").appendChild(newRow);
+    }
+  </script>
+</head>
+<body>
+<div class="container">
+  <h2>Foglio Ore</h2>
+  <table>
+    <tr>
+      <td><label>Nome:</label> <input type="text"></td>
+      <td><label>Progetto:</label> <input type="text"></td>
+      <td><label>Codice Fiscale:</label> <input type="text"></td>
+      <td><label>Data:</label> <input type="date" id="date" onchange="updateDays()"></td>
+    </tr>
+  </table>
+  <table>
+    <thead>
+    <tr id="table-header">
+      <th>Attività</th>
+      <th>1</th>
+      <th>2</th>
+      <th>3</th>
+      <th>...</th>
+      <th>31</th>
+      <th>Totale Ore</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr class="hours-row"></tr>
+    <tr class="hours-row"></tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

@@ -1,0 +1,202 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" lang="">
+<head>
+  <title>Applicazione Web Timesheet</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <style>
+    .search-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      justify-content: left;
+    }
+
+    #searchProject {
+      background-image: url('/lente.png');
+      background-position: 10px 10px;
+      background-repeat: no-repeat;
+      background-size: 20px 20px;
+      width: 50%;
+      font-size: 16px;
+      padding: 12px 20px 12px 40px;
+      border: 1px solid #ddd;
+      margin-bottom: 12px;
+      flex: 1%;
+    }
+
+    #myTable {
+      border-collapse: collapse;
+      width: 100%;
+      border: 1px solid #ddd;
+      font-size: 18px;
+    }
+
+    #myTable th, #myTable td {
+      text-align: left;
+      padding: 12px;
+    }
+
+    #myTable tr {
+      border-bottom: 1px solid #ddd;
+    }
+
+    #myTable tr.header, #myTable tr:hover {
+      background-color: #f1f1f1;
+    }
+
+    /* Stile per i pulsanti */
+    .btn {
+      display: inline-block;
+      padding: 8px 12px;
+      margin: 2px;
+      font-size: 14px;
+      text-align: center;
+      text-decoration: none;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .btn-show {
+      background-color: #007bff;
+      color: white;
+    }
+
+    .btn-show:hover {
+      background-color: #0056b3;
+    }
+
+    .btn-search {
+      background-color: #007bff;
+      color: white;
+    }
+
+    .btn-search:hover {
+      background-color: #0056b3;
+    }
+
+    .btn-edit {
+      background-color: #ffa500;
+      color: white;
+    }
+
+    .btn-edit:hover {
+      background-color: #cc8400;
+    }
+
+    .btn-delete {
+      background-color: #dc3545;
+      color: white;
+    }
+
+    .btn-delete:hover {
+      background-color: #a71d2a;
+    }
+
+    .btn-sortProject {
+      background-color: #007bff;
+      color: white;
+    }
+
+    .btn-sortProject:hover {
+      background-color: #0056b3;
+    }
+
+    .btn-sortHours:hover {
+      background-color: #5c5c5c;
+    }
+
+    .btn-addActivity {
+      background-color: #ff52c2;
+      color: white;
+    }
+
+    .btn-addActivity:hover {
+      background-color: #9e0768;
+    }
+
+    .btn-approve {
+      background-color: #217500;
+      color: white;
+    }
+    .btn-approve:hover {
+      background-color: #1A5E00;
+    }
+
+    .btn-compare {
+      background-color: #007bff;
+      color: white;
+    }
+    .btn-compare:hover{
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+
+<body>
+<h1>LISTA PROGETTI</h1>
+
+<div class="search-container" style="width: 100%; display: flex; align-items: center; gap: 10px;">
+  <!--Barra di ricerca per nome-->
+  <form action="/search" method="get" style="flex-grow: 1; display: flex; align-items: center; gap: 10px;">
+    <input type="text" id="searchProject" name="query" placeholder="Cerca progetto..." title="Type in a name" style="flex-grow: 1; margin-bottom: 1%;">
+    <div><button type="submit" class="btn btn-search" style="width: 100px;">Cerca</button></div>
+  </form>
+
+  <form action="/list" method="get" style="display: flex; align-items: center;">
+    <input type="hidden" name="sort" value="nomeProgetto">
+    <button type="submit" class="btn btn-sortProject" style="width: 150px;">Ordina per progetto</button>
+  </form>
+</div>
+
+
+<table id="myTable">
+  <thead>
+  <tr class="header">
+    <th style="width:40%;">Nome progetto</th>
+    <th style="width:40%;">Azioni</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="timesheet : ${timesheets}">
+    <td th:text="${timesheet.nomeProgetto}"> <b>Progetto Alpha</b> </td>
+    <td>
+      <a th:href="@{/read(id=${timesheet.id})}" class="btn btn-show"> Mostra </a>
+      <a th:href="@{/edit(id=${timesheet.id})}" class="btn btn-edit"> Modifica </a>
+      <a th:href="@{/addActivity(id=${timesheet.id})}" class="btn btn-addActivity"> + Attività </a>
+      <a th:href="@{/approve(id=${timesheet.id})}" class="btn btn-approve"> Richiedi Approvazione </a>
+      <a th:href="@{/delete(id=${timesheet.id})}" class="btn btn-delete" onclick="return confirm('Sei sicuro di voler eliminare questo timesheet?');"> Elimina </a>
+    </td>
+  </tr>
+
+  </tbody>
+</table>
+
+<br>
+<a href="/input"> Aggiungi nuovo timesheet </a>
+
+<!-- Form per confrontare due timesheet -->
+<h2>Confronta Timesheet</h2>
+<form action="/compare" method="get">
+
+  <div style="margin-bottom: 20px">
+    <label for="timesheet1">Seleziona il primo timesheet:</label>
+    <select name="timesheet1" id="timesheet1" required>
+      <option id="project1" th:each="timesheet : ${timesheets}" th:value="${timesheet.id}" th:text="${timesheet.nomeProgetto}"></option>
+    </select>
+  </div>
+
+  <div style="margin-bottom: 20px">
+    <label for="timesheet2">Seleziona il secondo timesheet:</label>
+    <select name="timesheet2" id="timesheet2" required>
+      <option id="project2" th:each="timesheet : ${timesheets}" th:value="${timesheet.id}" th:text="${timesheet.nomeProgetto}"></option>
+    </select>
+  </div>
+
+
+  <button type="submit" class="btn btn-compare"> Confronta </button>
+</form>
+
+</body>
+</html>

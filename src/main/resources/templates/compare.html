@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Confronto Timesheet</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    .container { max-width: 900px; margin: auto; }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+    th { background-color: #0073e6; color: white; }
+  </style>
+</head>
+
+<body>
+<h2 class="container">Confronto Timesheet</h2>
+<div class="container">
+  <p><strong>Timesheet 1:</strong> <span th:text="${timesheet1.nomeProgetto}"></span></p>
+  <p><strong>Timesheet 2:</strong> <span th:text="${timesheet2.nomeProgetto}"></span></p>
+
+  <h3>Confronto Ore Lavorate per Attività</h3>
+  <table>
+    <thead>
+    <tr>
+      <th>Progetto</th>
+      <th>Attività</th>
+      <th th:each="data : ${giorniConfronto}" th:text="${#dates.format(data, 'd MMM yyyy')}"></th>
+    </tr>
+    </thead>
+    <tbody>
+
+    <!-- Riga per il primo timesheet -->
+    <tr th:each="entry : ${oreLavorate1}">
+      <td th:text="${progetti1[entry.key]}"></td>
+      <td th:text="${entry.key}"></td>
+      <td th:each="data : ${giorniConfronto}">
+        <span th:text="${entry.value != null and entry.value.containsKey(data) ? entry.value.get(data) : '0'}"></span>
+      </td>
+    </tr>
+
+    <!-- Riga per il secondo timesheet -->
+    <tr th:each="entry : ${oreLavorate2}">
+      <td th:text="${progetti2[entry.key]}"></td>
+      <td th:text="${entry.key}"></td>
+      <td th:each="data : ${giorniConfronto}">
+        <span th:text="${entry.value != null and entry.value.containsKey(data) ? entry.value.get(data) : '0'}"></span>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <h3>Confronto Ore Totali Lavorate</h3>
+  <table>
+    <thead>
+    <tr>
+      <th>Timesheet</th>
+      <th>Ore Totali</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td th:text="${timesheet1.nomeProgetto}"></td>
+      <td th:text="${totaleOre1}"></td>
+    </tr>
+    <tr>
+      <td th:text="${timesheet2.nomeProgetto}"></td>
+      <td th:text="${totaleOre2}"></td>
+    </tr>
+    </tbody>
+  </table>
+
+  <br>
+  <a href="/list">Torna alla lista</a>
+</div>
+
+</body>
+</html>

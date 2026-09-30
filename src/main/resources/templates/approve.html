@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Riepilogo</title>
+
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .container { max-width: 900px; margin: auto; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+        th { background-color: #0073e6; color: white; }
+    </style>
+</head>
+<body>
+<h2>Riepilogo</h2>
+<div class="container">
+    <p><strong>Nome Lavoratore:</strong> <span th:text="${timesheet.nomeLavoratore}"></span></p>
+    <p><strong>Nome Progetto:</strong> <span th:text="${timesheet.nomeProgetto}"></span></p>
+    <p><strong>Codice Fiscale:</strong> <span th:text="${timesheet.codiceFiscale}"></span></p>
+
+    <h3>Ore Lavorate per Attività</h3>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Attività</th>
+            <th th:each="data : ${giorniAttivita}" th:text="${#dates.format(data, 'dd/MM/yyyy')}"></th>
+            <th>Ore Totali</th> <!-- 🔹 Nuova colonna per il totale -->
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="entry : ${oreLavorateMap}">
+            <td th:text="${entry.key}"></td> <!-- Nome dell'attività -->
+
+            <!-- 🔹 Celle con le ore lavorate -->
+            <td th:each="data : ${giorniAttivita}">
+                <span th:text="${entry.value != null and entry.value.containsKey(data) ? entry.value.get(data) : '0'}"></span>
+            </td>
+
+            <!-- 🔹 Colonna per le ore totali -->
+            <td>
+                <span th:text="${oreTotaliMap[entry.key]}"></span>
+            </td>
+        </tr>
+        </tbody>
+
+        <!-- 🔹 Riga Totale -->
+        <tfoot>
+        <tr>
+            <th>Totale Ore</th>
+            <th th:colspan="${giorniAttivita.size()}"></th> <!-- Spazio per allineare -->
+            <th><span th:text="${totaleOreComplessivo}"></span></th> <!-- 🔹 Totale Complessivo -->
+        </tr>
+        </tfoot>
+
+    </table>
+
+    <br>
+
+    <div style="margin-bottom: 20px">
+
+        <form action="/approve-request" method="post" th:if="${!richiestaInviata}">
+            <input type="hidden" name="id" th:value="${timesheet.id}"/>
+            <button type="submit" onclick="return confirm('Richiesta inviata con successo');">RICHIEDI APPROVAZIONE</button>
+        </form>
+        <span th:if="${richiestaInviata}" style="color: darkgreen; text-align: center; font-weight: bold;">Richiesta già inviata</span>
+    </div>
+
+    <div>
+        <a href="/list">Torna alla lista</a>
+    </div>
+
+</div>
+
+
+</body>
+</html>

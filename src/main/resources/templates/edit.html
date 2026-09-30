@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modifica Timesheet</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    .container { max-width: 800px; margin: auto; }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+    th { background-color: #0073e6; color: white; }
+    input[type="text"], input[type="number"] { width: 100%; padding: 5px; box-sizing: border-box; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Modifica Timesheet</h2>
+
+  <form action="/update" method="post">
+    <input type="hidden" name="id" th:value="${timesheet.id}">
+
+    <label>Nome Progetto:</label>
+    <input type="text" id="nome-progetto" name="nomeProgetto" th:value="${timesheet.nomeProgetto}" required>
+
+    <h3>Modifica Attività</h3>
+    <table>
+      <thead>
+      <tr>
+        <th>Attività</th>
+        <th>Data</th>
+        <th>Ore Lavorate</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="entry : ${attivitaModificabili}">
+        <td>
+          <input type="hidden" id="attivita-nome" name="attivitaNome" th:value="${entry.nomeAttivita}">
+          <span th:text="${entry.nomeAttivita}"></span>
+        </td>
+        <td>
+          <input type="hidden" id="attivita-data" name="attivitaDate" th:value="${#dates.format(entry.data, 'yyyy-MM-dd')}">
+          <span th:text="${#dates.format(entry.data, 'dd/MM/yyyy')}"></span>
+        </td>
+        <td>
+          <input type="number" id="attivita-ore" name="attivitaOre" th:value="${entry.oreLavorate}" min="1" max="8" required>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+
+    <br>
+    <input type="submit" value="Salva Modifiche">
+  </form>
+
+  <br>
+  <a href="/list">Torna alla lista</a>
+</div>
+
+</body>
+</html>
+
+<script>
+  document.querySelector("form").addEventListener("submit", function(event) {
+    event.preventDefault(); // Previene l'invio automatico
+
+    let formData = new FormData(this);
+    console.log("----- DATI FORM INVIATI -----");
+    for (let pair of formData.entries()) {
+      console.log(pair[0] + ": " + pair[1]);
+    }
+    console.log("-----------------------------");
+
+    this.submit(); // Ora invia il form
+  });
+</script>
+

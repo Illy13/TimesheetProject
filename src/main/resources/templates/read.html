@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dettaglio Timesheet</title>
+
+    <!-- Importa jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .container { max-width: 900px; margin: auto; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+        th { background-color: #0073e6; color: white; }
+        .buttons-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+        }
+        .header-container {
+            margin-right: auto;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+        }
+        /* Stile per i pulsanti */
+        .btn {
+            display: inline-block;
+            padding: 8px 12px;
+            margin: 2px;
+            font-size: 14px;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn-download {
+            background-color: #007bff;
+            color: white;
+            margin-left: auto;
+        }
+
+        .btn-download:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-sortHours {
+            background-color: #007bff;
+            color: white;
+            margin-left: auto;
+        }
+
+        .btn-sortHours:hover {
+            background-color: #0056b3;
+        }
+    </style>
+    <script>
+        function downloadFile() {
+            let timesheetId = "[[${timesheet.id}]]";
+            window.location.href = "/downloadTimesheetExcel?id=" + timesheetId;
+        }
+    </script>
+</head>
+<body>
+
+<div class="container">
+    <h2>Dettaglio Timesheet</h2>
+
+    <p><strong>Nome Lavoratore:</strong> <span th:text="${timesheet.nomeLavoratore}"></span></p>
+    <p><strong>Nome Progetto:</strong> <span th:text="${timesheet.nomeProgetto}"></span></p>
+    <p><strong>Codice Fiscale:</strong> <span th:text="${timesheet.codiceFiscale}"></span></p>
+
+
+    <div class="buttons-container">
+        <div class="header-container"><h3 >Ore Lavorate per Attività</h3></div>
+        <div class="button-group"> <!--Bottone download-->
+            <p><button class="btn btn-download" onclick="downloadFile()()">Scarica</button></p>
+            <p><a class="btn btn-sortHours" th:href="@{/read(id=${timesheet.id}, sort='ore')}">Ordina per ore</a></p>
+        </div>
+    </div>
+
+    <table id="myTable">
+        <thead>
+        <tr>
+            <th>Attività</th>
+            <th th:each="data : ${giorniAttivita}" th:text="${#dates.format(data, 'dd MMMM yyy')}"></th>
+            <th>Ore Totali</th> <!-- 🔹 Nuova colonna per il totale -->
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="entry : ${oreLavorateMap}">
+            <td th:text="${entry.key}"></td> <!-- Nome dell'attività -->
+
+            <!-- 🔹 Celle con le ore lavorate -->
+            <td th:each="data : ${giorniAttivita}">
+                <span th:text="${entry.value != null and entry.value.containsKey(data) ? entry.value.get(data) : '0'}"></span>
+            </td>
+
+            <!-- 🔹 Colonna per le ore totali -->
+            <td>
+                <span th:text="${oreTotaliMap[entry.key]}"></span>
+            </td>
+        </tr>
+        </tbody>
+
+        <!-- 🔹 Riga Totale -->
+        <tfoot>
+        <tr>
+            <th>Totale Ore</th>
+            <th th:colspan="${giorniAttivita.size()}"></th> <!-- Spazio per allineare -->
+            <th><span th:text="${totaleOreComplessivo}"></span></th> <!-- 🔹 Totale Complessivo -->
+        </tr>
+        </tfoot>
+
+    </table>
+
+    <br>
+    <a href="/list">Torna alla lista</a>
+
+</div>
+
+</body>
+</html>

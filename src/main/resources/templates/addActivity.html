@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aggiungi Attività</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .container { max-width: 600px; margin: auto; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid #ccc; padding: 5px; text-align: center; }
+        th { background-color: #0073e6; color: white; }
+        input[type="text"], input[type="number"], input[type="date"] {
+            width: 100%;
+            padding: 5px;
+            box-sizing: border-box;
+        }
+        .add-btn { background-color: #4CAF50; color: white; border: none; padding: 5px 10px; cursor: pointer; margin-top: 10px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Aggiungi Attività</h2>
+
+    <form action="/saveActivity" method="post">
+        <input type="hidden" name="timesheetId" th:value="${timesheet.id}">
+
+        <label>Nome Attività:</label>
+        <input type="text" name="nomeAttivita" required>
+
+        <label>Ore Lavorate:</label>
+        <input type="number" name="oreLavorate" min="1" max="8" required>
+
+        <label>Data Attività:</label>
+        <input type="date" name="dataLavoro" required>
+
+        <br><br>
+        <input type="submit" value="Salva Attività">
+    </form>
+
+    <br>
+    <a href="/list">Torna alla lista</a>
+</div>
+</body>
+</html>
