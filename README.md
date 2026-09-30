@@ -1,257 +1,223 @@
-# Gestore dei timesheet dei ricercatori
-
-Progetto a cura di:
-- Mattia Bernardi (VR502842)
-- Elisa Biasi (VR525865)
-- Ilaria Meghi (VR516348)
+# Researcher Timesheet Manager
 
 ---
 
-## Introduzione
-La componente software è stata sviluppata con lo scopo di migliorare le attività di creazione, compilazione e gestione dei timesheet dei ricercatori universitari. 
-Il nostro team si è concentrato sulla progettazione e creazione della pagina personale di un ricercatore, includendo inoltre diverse funzionalità utili. 
-Il sistema mette a disposizione svariati strumenti per l'analisi e la ricerca che facilitano l'interazione e l'esperienza utente.
+## Introduction
+This software application was developed to improve the creation, compilation, and management processes of timesheets for university researchers.
+Our team focused on the design and implementation of a researcher's personal dashboard, including several useful features. 
+The system provides various analytical and search tools designed to enhance user interaction and experience.
 
 ---
 
-## Scaricare il progetto
-Se si desidera scaricare il progetto è necessario clonare la repository digitando sul terminale il comando **git clone https://github.com/Illy13/EsameTimesheetProject_final.git**. Per scaricare le dipendenze necessarie al corretto funzionamento del sistema e compilare il progetto è necessario eseguire il comando **./gradlew build**.
-Infine per eseguire il progetto sarà sufficiente lanciare **./gradlew bootRun** e la piattaforma sarà visibile alla pagina **localhost:8080**.
+## Downloading the Project
+To download the project, clone the repository by entering the following command into your terminal: **git clone https://github.com/Illy13/EsameTimesheetProject_final.git**. To download the necessary dependencies and compile the project, run **./gradlew build**.
+Finally, to execute the application, run **./gradlew bootRun** The platform will be accessible at **localhost:8080**.
 
 ---
 
-## Descrizione dei requisiti 
-Il sistema deve essere in grado di:
-- Creare nuovi timesheet.
-- Modificare timesheet esistenti.
-- Visualizzare timesheet esistenti.
-- Eliminare timesheet.
-- Mandare la richiesta di approvazione del timesheet al responsabile scientifico.
-- Confrontare timesheet diversi.
-- Ricercare timesheet in base al nome del progetto.
-- Ordinare i diversi timesheet in base al nome del progetto. Ordinare le attività di un progetto in base alle ore lavorate.
-- Scaricare il timesheet del progetto come file excel
+## System Requirements 
+The system must be able to:
+- Create new timesheets.
+- Edit existing timesheets.
+- View existing timesheets.
+- Delete timesheets.
+- Submit timesheet approval requests to the Principal Investigator / Scientific Supervisor.
+- Compare different timesheets.
+- Search for timesheets by project name.
+- Sort timesheets by project name, and sort project activities by hours worked.
+- Export/Download project timesheets as Excel files.
   
-**Note**:
-- La richiesta di approvazione è chiaramente simulata in quanto non è stata sviluppata la componente software per le attività del responsabile scientifico.
-- Si parte dal presupposto che l'utente sia autenticato e all'interno della sua area personale.
+**Notes**:
+- The approval request process is simulated, as the software component for supervisor management was not within scope.
+- It is assumed that the user is already authenticated and within their personal area.
 
 ---
 
-## Scenari di utilizzo
+## Usage Scenarios
 
-**Nota:**
+**Note:**
 
-- I vincoli di sistema sono tutti quei controlli che il software effettua sull'inserimento delle ore. In particolare:
-  - Il numero totale di ore lavorative in una giornata, ovvero la somma delle ore delle attività di un progetto in una certa data, deve essere al massimo 8. Questo vincolo viene controllato durante l'inserimento di ore in un timesheet già esistente (nelle pagine edit e addActivity).
-  - Nella pagina di creazione il numero di ore inserito per la prima attività deve essere compreso tra 1 e 8 estremi inclusi.
-  - Nella pagina di modifica il numero di ore inserito deve essere compreso tra 0 e 8 estremi inclusi.
-  - Non possono essere inserite ore di lavoro nei giorni festivi. 
+- System constraints refer to checks performed by the software on time logging:
+  - The total working hours for a single day (the sum of hours logged across all project activities on a specific date) cannot exceed 8 hours. This constraint is checked when logging hours to an existing timesheet (on the edit and addActivity pages).
+  - On the creation page, the hours logged for the initial activity must be between 1 and 8 (inclusive).
+  - On the edit page, the logged hours must be between 0 and 8 (inclusive).
+  - Hours cannot be logged on public holidays or weekends. 
 
-### Scenario 1: Creare un nuovo timesheet
-- **Assunzioni iniziali**: 
-  L'utente desidera creare un nuovo timesheet tramite il sistema software. 
-- **Utilizzo normale del sistema**:
-  1. L'utente accede alla pagina principale, dove può osservare la lista completa dei timesheet esistenti (può essere inizialmente vuota) e i diversi strumenti di ricerca.
-  2. L'utente a questo punto deve cliccare sul link 'Aggiungi nuovo timesheet'
-  3. L'utente viene reindirizzato alla pagina di creazione.
-  4. L'utente può ora compilare il form per creare il timesheet desiderato, una volta soddisfatto deve premere 'Salva Timesheet'.
-  5. Il timesheet viene dunque creato e visualizzato nella pagina principale con a fianco il menu delle azioni.
-- **Cosa può andare storto**:
-   - Il sistema deve essere in grado di gestire situazioni in cui alcuni dei dati inseriti non soddisfano i vincoli di sistema; 
-     in tal caso, il sistema deve notificare all'utente l'errore specificando per quale motivo l'operazione non è andata a buon fine.
-- **Altre attività**:
-   - Quando viene premuto 'Salva Timesheet' il sistema salva nel database il nuovo timesheet.
-   - L’utente può decidere se salvare i dati o tornare alla pagina principale, in quest'ultimo caso i dati inseriti verranno persi.
-- **Stato del sistema a fine utilizzo**:
-  - Il sistema mostra all’utente la lista dei timesheet e rende disponibile un menu con le diverse azioni che possono essere svolte su ogni istanza; il sistema rimane in uno stato pronto per accogliere nuove   
-    richieste.
+### Scenario 1: Create a New Timesheet
+- **Initial Assumptions**: 
+  The user wants to create a new timesheet using the system. 
+- **Main Success Scenario**:
+  1. The user accesses the main page, displaying the complete list of existing timesheets (which may initially be empty) and search tools.
+  2. The user clicks the "Add new timesheet" link.
+  3. The user is redirected to the creation page.
+  4. The user completes the form to create the timesheet and clicks "Save Timesheet".
+  5. The timesheet is created and displayed on the main page alongside an actions menu.
+- **Exception Handling**:
+   - If submitted data violates system constraints, the system notifies the user with an error message detailing why the operation failed.
+- **Other Actions**:
+   - Clicking "Save Timesheet" persists the new timesheet to the database.
+   - The user can choose to cancel and return to the main page, discarding any unsaved input.
+- **System State upon Completion**:
+  - The system presents the updated timesheet list with available action items and returns to an idle state ready for new requests.
  
-### Scenario 2: Modificare timesheet esistenti.
-**Assunzioni iniziali**: 
-  L'utente desidera modificare un timesheet esistente tramite il sistema software.
+### Scenario 2: Edit Existing Timesheets
+**Initial Assumptions**: 
+ The user wants to edit an existing timesheet using the system.
 
-- L'utente vuole aggiungere un'attività al timesheet.  
-  - **Utilizzo normale del sistema**:
-  1. L'utente accede alla pagina principale, dove può osservare la lista completa dei timesheet esistenti.
-  2. L'utente trova nella lista il timesheet che vuole aggiornare e preme il pulsante '+ Attività'
-  3. L'utente viene reindirizzato alla pagina di aggiunta dell'attività.
-  4. L'utente può ora compilare il form indicando l'attività svolta, le ore lavorate e la data in cui è stata svolta l'attività, una volta soddisfatto deve premere 'Salva Attività'.
-  5. Il timesheet viene aggiornato.
-  - **Cosa può andare storto**:
-     - Il sistema deve essere in grado di gestire situazioni in cui alcuni dei dati inseriti non soddisfano i vincoli di sistema; 
-       in tal caso, il sistema deve notificare all'utente l'errore specificando per quale motivo l'operazione non è andata a buon fine.
-  - **Altre attività**:
-     - Quando viene premuto 'Salva Attività' il sistema salva nel database l'aggiornamento apportato
-     - L’utente può decidere se salvare i dati o tornare alla pagina principale, in quest'ultimo caso i dati inseriti verranno persi.
-  - **Stato del sistema a fine utilizzo**:
-     - Il sistema mostra all’utente la lista dei timesheet e rende disponibile un menu con le diverse azioni che possono essere svolte su ogni istanza; il sistema rimane in uno stato pronto per accogliere nuove richieste.
+- Sub-scenario 2.1: Add an Activity to a Timesheet.  
+  - **Main Success Scenario**:
+  1. The user navigates to the main page displaying all timesheets.
+  2. The user selects a timesheet and clicks "+ Activity".
+  3. The user is redirected to the activity addition page.
+  4. The user fills in the form details (activity description, hours worked, date) and clicks "Save Activity".
+  5. The timesheet updates.
+  - **Exception Handling**:
+     - Invalid data violating system constraints triggers an error notification explaining the failure.
+  - **Other Actions**:
+     - Clicking "Save Activity" saves the updates to the database.
+     - The user may cancel and return to the main page, discarding unsaved entries.
+  - **System State upon Completion**:
+     - The updated timesheet list is displayed, and the system enters an idle state.
 
-- L'utente vuole cambiare il numero di ore indicate attualmente nel timesheet per un'attività già inserita.
-  - **Utilizzo normale del sistema**:
-  1. L'utente accede alla pagina principale, dove può osservare la lista completa dei timesheet esistenti.
-  2. L'utente trova nella lista il timesheet che vuole modificare e preme il pulsante 'Modifica'
-  3. L'utente viene reindirizzato alla pagina di modifica.
-  4. L'utente cerca nella tabella la riga corrispondente alla data e all'attività che desidera modificare e cambia il numero di ore inserito.
-  5. L'utente una volta soddisfatto preme 'Salva Modifiche'.
-  6. Il timesheet viene modificato.
-  - **Cosa può andare storto**:
-     - Il sistema deve essere in grado di gestire situazioni in cui alcuni dei dati inseriti non soddisfano i vincoli di sistema; 
-       in tal caso, il sistema deve notificare all'utente l'errore specificando per quale motivo l'operazione non è andata a buon fine.
-  - **Altre attività**:
-     - Quando viene premuto 'Salva Modifiche' il sistema salva nel database le modifiche apportate
-     - L’utente può decidere se salvare i dati o tornare alla pagina principale, in quest'ultimo caso i dati inseriti verranno persi.
-  - **Stato del sistema a fine utilizzo**:
-     - Il sistema mostra all’utente la lista dei timesheet e rende disponibile un menu con le diverse azioni che possono essere svolte su ogni istanza; il sistema rimane in uno stato pronto per accogliere nuove 
-       richieste.
+- Sub-scenario 2.2: Modify Hours for an Existing Activity
+  - **Main Success Scenario**:
+  1. The user navigates to the main page.
+  2. The user locates the target timesheet and clicks "Edit".
+  3. The user is redirected to the edit page.
+  4. The user locates the specific date/activity row in the table and modifies the logged hours.
+  5. The user clicks "Save Changes".
+  6. The timesheet is updated.
+  - **Exception Handling**:
+     - Input violating system constraints yields a descriptive error message.
+  - **Other Actions**:
+     - Clicking "Save Changes" persists updates to the database.
+     - The user can cancel without saving.
+  - **System State upon Completion**:
+     - The system displays the updated list and returns to an idle state.
      
-### Scenario 3: Visualizzare timesheet esistenti
-- **Assunzioni iniziali**: 
-  L'utente desidera visualizzare un timesheet esistente tramite il sistema software.
-- **Utilizzo normale del sistema**:
-  1. L'utente accede alla pagina principale, dove può osservare la lista completa dei timesheet esistenti.
-  2. L'utente trova nella lista il timesheet che vuole visualizzare e preme il pulsante 'Mostra'
-  3. L'utente viene reindirizzato alla pagina dove può vedere il timesheet completo del progetto selezionato.
-- **Cosa può andare storto**:
-   - Il sistema deve essere in grado di gestire la situazione in cui l'utente voglia visualizzare un timesheet caricato in modo errato (ci sono stati problemi nella creazione o nella modifica); 
-     il sistema deve impedire all'utente di interagire con tali timesheet.
-- **Stato del sistema a fine utilizzo**:
-   - Il sistema mostra all’utente il timesheet del progetto e rende disponibili diverse funzionalità; il sistema rimane in uno stato pronto per accogliere nuove richieste:
-     - Tornare alla pagina principale
-     - Ordinare in modo crescente le attività svolte, in base al numero di ore lavorate 
-     - Scaricare il timesheet 
+### Scenario 3: View Existing Timesheets
+- **Initial Assumptions**: 
+  The user wants to view an existing timesheet.
+- **Main Success Scenario**:
+  1. The user accesses the main page displaying all timesheets.
+  2. The user locates the desired timesheet and clicks "Show".
+  3. The user is redirected to the complete view page for the selected project's timesheet.
+- **Exception Handling**:
+   - If a timesheet was corrupted or improperly saved during creation/modification, the system prevents user interaction with that invalid entry.
+- **System State upon Completion**:
+   - The detailed project timesheet is displayed with option controls available:
+     - Return to the main page
+     - Sort activities in ascending order by hours worked
+     - Download the timesheet
 
-### Scenario 4: Eliminare timesheet.
-- **Assunzioni iniziali**: 
-  L'utente desidera eliminare un timesheet esistente tramite il sistema software.
-- **Utilizzo normale del sistema**:
-  1. L'utente accede alla pagina principale, dove può osservare la lista completa dei timesheet esistenti.
-  2. L'utente trova nella lista il timesheet che vuole eliminare e preme il pulsante 'Elimina'
-  3. Il sistema chiede conferma all'utente se vuole eliminare il timesheet selezionato.
-  4. L'utente conferma di voler eliminare il timesheet selezionato.
-  5. Il timesheet viene eliminato
-- **Cosa può andare storto**:
-   - Il sistema deve essere in grado di gestire la situazione in cui l'utente non voglia più eliminare il timesheet selezionato; 
-     il sistema deve chiedere dunque conferma all'utente prima di eliminare il timesheet.
-- **Stato del sistema a fine utilizzo**:
-   - Il sistema mostra all’utente la lista dei timesheet aggiornata e rende disponibile un menu con le diverse azioni che possono essere svolte su ogni istanza; il sistema rimane in uno stato pronto per 
-     accogliere nuove richieste.
+### Scenario 4: Delete a Timesheet.
+- **Initial Assumptions**: 
+  The user wants to delete an existing timesheet.
+- **Main Success Scenario**:
+  1. The user accesses the main page.
+  2. The user selects a timesheet and clicks "Delete".
+  3. The system prompts the user for confirmation.
+  4. The user confirms the deletion.
+  5. The timesheet is permanently removed.
+- **Exception Handling**:
+   - If the user decides not to proceed, the confirmation dialog allows canceling the operation safely.
+- **System State upon Completion**:
+   - The system displays the updated timesheet list and enters an idle state.
      
-### Scenario 5: Richiedere approvazione del timesheet.
-- **Assunzioni iniziali**: 
-  L'utente desidera richiedere l'approvazione del timesheet al proprio responsabile scientifico tramite il sistema software.  
-- **Utilizzo normale del sistema**:
-  1. L'utente accede alla pagina principale, dove può osservare la lista completa dei timesheet esistenti.
-  2. L'utente trova nella lista il timesheet desiderato e preme il pulsante 'Richiedi Approvazione'
-  3. L'utente viene reindirizzato alla pagina per la richiesta dell'approvazione dove può controllare l'intero timesheet.
-  4. L'utente preme 'RICHIEDI APPROVAZIONE'.
-  5. Il sistema avvisa l'utente che la domanda è stata inviata con successo e rimuove il pulsante 'RICHIEDI APPROVAZIONE'.
-  6. L'utente torna alla pagina principale premendo 'Torna alla lista'.
-- **Cosa può andare storto**:
-   - Il sistema deve essere in grado di gestire la situazione in cui l'utente non voglia più richiedere l'approvazione per il timesheet selezionato; 
-     il sistema deve fornire all'utente il modo per tornare alla pagina principale senza mandare la richiesta.
-- **Altre attività**:
-   - L’utente una volta raggiunta la pagina per la richiesta dell'approvazione può decidere se effettuare la richiesta o tornare alla pagina principale.
-- **Stato del sistema a fine utilizzo**:
-   - Il sistema mostra all’utente la lista dei timesheet e rende disponibile un menu con le diverse azioni che possono essere svolte su ogni istanza; il sistema rimane in uno stato pronto per accogliere nuove 
-     richieste.
+### Scenario 5: Submit Timesheet Approval Request
+- **Initial Assumptions**: 
+ The user wants to request supervisor approval for a timesheet.
+- **Main Success Scenario**:
+  1. The user accesses the main page.
+  2. The user selects the target timesheet and clicks "Request Approval".
+  3. The user is redirected to the review page to verify the timesheet details.
+  4. The user clicks "REQUEST APPROVAL".
+  5. The system displays a success message confirming submission and removes the "REQUEST APPROVAL" button.
+  6. The user returns to the main page by clicking "Back to list"
+- **Exception Handling**:
+   - The user can exit the review screen and return to the main list without sending the request.
+- **Other Actions**:
+   - The approval request screen gives the user the final option to confirm or cancel before submission.
+- **System State upon Completion**:
+   - The main page is displayed, and the system waits for further input.
        
-### Scenario 6: Confrontare timesheet diversi.
-- **Assunzioni iniziali**: 
-  L'utente desidera confrontare timesheet diversi tramite il sistema software.
-- **Utilizzo normale del sistema**:
-  1. L'utente accede alla pagina principale, dove può osservare la lista completa dei timesheet esistenti e il form 'Confronta Timesheet'.
-  2. L'utente compila il form 'Confronta Timesheet' andando a selezionare i due timesheet da confrontare.
-  3. L'utente preme poi il bottone 'Confronta'.
-  4. Il sistema ridireziona l'utente alla pagina dove viene mostrato il risultato del confronto tra i due timesheet selezionati.
-  5. L’utente torna alla pagina principale.
-- **Cosa può andare storto**:
-   - Il sistema deve essere in grado di gestire situazioni in cui non siano presenti progetti nel database (non è possibile selezionare alcun progetto) o venga premuto il bottone 'Confronta' senza aver inserito un input; 
-     il sistema deve mandare un messaggio di errore all'utente.
-- **Stato del sistema a fine utilizzo**:
-   - Il sistema mostra all’utente la lista dei timesheet e rende disponibile un menu con le diverse azioni che possono essere svolte su ogni istanza; il sistema rimane in uno stato pronto per accogliere nuove 
-     richieste.
+### Scenario 6: Compare Timesheets
+- **Initial Assumptions**: 
+ The user wants to compare two different timesheets.
+- **Main Success Scenario**:
+  1. The user accesses the main page displaying timesheets and the "Compare Timesheets" form.
+  2. The user selects two timesheets from the selection form.
+  3. The user clicks "Compare".
+  4. The user is redirected to a page presenting the side-by-side comparison results.
+  5. The user returns to the main page.
+- **Exception Handling**:
+   - If no projects exist in the database or if the user clicks "Compare" without making selections, an appropriate error message is displayed.
+- **System State upon Completion**:
+   - The system returns to the main page list view in an idle state.
 
-### Scenario 7: Ricercare timesheet in base al nome del progetto.
-- **Assunzioni iniziali**: 
-  L'utente desidera ricercare timesheet in base al nome del progetto tramite il sistema software.
-- **Utilizzo normale del sistema**:
-  1. L'utente accede alla pagina principale, dove può osservare la lista completa dei timesheet esistenti e la barra di ricerca.
-  2. L'utente digita nella barra di ricerca il nome del progetto che desidera trovare e preme il bottone 'Cerca'.
-  3. Il sistema a questo punto mostra solamente le righe della lista in cui il nome del progetto corrisponde a quello cercato.
-- **Cosa può andare storto**:
-   - Il sistema deve essere in grado di gestire situazioni in cui il nome inserito non sia presente nel database o venga premuto il bottone 'Cerca' senza aver inserito un input; 
-     nel primo caso il sistema deve mostrare la lista vuota, nel secondo deve mostrare la lista con tutti i progetti presenti.
-- **Stato del sistema a fine utilizzo**:
-   - Il sistema mostra all’utente la lista dei timesheet e rende disponibile un menu con le diverse azioni che possono essere svolte su ogni istanza; il sistema rimane in uno stato pronto per accogliere nuove 
-     richieste.
+### Scenario 7: Search Timesheets by Project Name
+- **Initial Assumptions:**: 
+ The user wants to filter timesheets using a project name search.
+- **Main Success Scenario**:
+  1. The user opens the main page containing the timesheet list and search bar.
+  2. The user enters a project name into the search bar and clicks "Search".
+  3. The system filters the view to display only matching project entries.
+- **Exception Handling**:
+   - Searching for a non-existent name returns an empty list; submitting an empty search query resets the view to show all project entries.
+- **System State upon Completion**:
+   - The filtered or full timesheet list is displayed, ready for further actions.
 
-### Scenario 8: Ordinamento
-- **8.1 Ordinare i diversi timesheet in base al nome del progetto**. 
-  - **Assunzioni iniziali**: 
-    L'utente desidera ordinare i diversi timesheet in base al nome del progetto tramite il sistema software.
-  - **Utilizzo normale del sistema**:
-  1. L'utente accede alla pagina principale, dove può osservare la lista completa dei timesheet esistenti e il pulsante 'Ordina per progetto'.
-  2. L'utente preme il pulsante 'Ordina per progetto'.
-  3. Il sistema a questo punto mostra la lista dei progetti in ordine alfabetico.
-  - **Cosa può andare storto**:
-     - La lista dopo l'ordinamento potrebbe perdere tutte le sue funzionalità; il sistema deve impedire che ciò accada.
-  - **Stato del sistema a fine utilizzo**:
-     - Il sistema mostra all’utente la lista dei timesheet ordinati in base al nome del progetto e rende disponibile un menu con le diverse azioni che possono essere svolte su ogni istanza; il sistema rimane in 
-       uno stato pronto per accogliere nuove richieste.
+### Scenario 8: Sorting Functionality
+- **8.1 Sort Timesheets by Project Name**. 
+  - **Initial Assumptions**: 
+    The user wants to order the main list alphabetically by project name.
+  - **Main Success Scenario**:
+  1. The user views the main list page and locates the "Sort by Project" button.
+  2. The user clicks "Sort by Project".
+  3. The list updates to display projects in alphabetical order.
+  - **Exception Handling**:
+     - The system ensures action menus and row functionalities remain intact after reordering
+  - **System State upon Completion**:
+     - The sorted list is shown with all action items functional.
  
-- **8.2 Ordinare le attività di un progetto in base alle ore lavorate**.
-  -  **Assunzioni iniziali**: 
-    L'utente desidera ordinare le attività di un progetto in base alle ore lavorate tramite il sistema software.
-  - **Utilizzo normale del sistema**:
-  1. L'utente accede nella pagina per la visualizzazione
-        - L'utente accede alla pagina principale, dove può osservare la lista completa dei timesheet esistenti.
-        - L'utente trova nella lista il timesheet desiderato e preme il pulsante 'Mostra'
-        - L'utente viene reindirizzato alla pagina dove viene mostrato il timesheet completo del progetto selezionato.
-  2. L'utente preme il pulsante 'Ordina per ore'.
-  3. Il sistema a questo punto mostra la lista dei progetti ordinata in ordine crescente in base alle ore lavorate.
-   - **Cosa può andare storto**:
-     - La lista dopo l'ordinamento potrebbe perdere tutte le sue funzionalità; il sistema deve impedire che ciò accada.
-  - **Stato del sistema a fine utilizzo**:
-    - Il sistema mostra all’utente il timesheet del progetto e rende disponibili diverse funzionalità; il sistema rimane in uno stato pronto per accogliere nuove richieste:
-       - Tornare alla pagina principale
-       - Ordinare in modo crescente le attività svolte, in base al numero di ore lavorate 
-       - Scaricare il timesheet 
+- **8.2 Sort Activities by Logged Hours**.
+  -  **Initial Assumptions**: 
+The user wants to sort activities within a specific project timesheet by duration.
+  - **Main Success Scenario**:
+  1. The user navigates to the detailed view page of a selected project timesheet (Main page -> "Show").
+  2. The user clicks "Sort by Hours".
+  3. The system orders the activity list in ascending order based on total hours logged.
+   - **Exception Handling**:
+     - Action links and export capabilities are preserved following the sort operation.
+  - **System State upon Completion**:
+    - The detailed project view presents sorted activities with available navigation and download actions. 
 
-### Scenario 9: Scaricare il timesheet del progetto come file excel 
-- **Assunzioni iniziali**: 
-  L'utente desidera scaricare il timesheet del progetto come file excel tramite il sistema software.
-- **Utilizzo normale del sistema**:
-  1. L'utente accede nella pagina per la visualizzazione
-        - L'utente accede alla pagina principale, dove può osservare la lista completa dei timesheet esistenti.
-        - L'utente trova nella lista il timesheet desiderato e preme il pulsante 'Mostra'
-        - L'utente viene reindirizzato alla pagina dove viene mostrato il timesheet completo del progetto selezionato.
-  2. L'utente preme il pulsante 'Scarica'.
-  3. Il sistema scarica il timesheet del progetto come file excel.
-- **Cosa può andare storto**:
-  - La directory dei download non è impostata su: /User/Utente/Downloads; il sistema evita di scaricare il file per evitare problemi.  
-- **Stato del sistema a fine utilizzo**:
-  - Il sistema mostra all’utente il timesheet del progetto e rende disponibili diverse funzionalità; il sistema rimane in uno stato pronto per accogliere nuove richieste:
-     - Tornare alla pagina principale
-     - Ordinare in modo crescente le attività svolte, in base al numero di ore lavorate 
-     - Scaricare il timesheet 
+### Scenario 9: Export/Download Timesheet as Excel File
+- **Initial Assumptions**: 
+  The user wants to download a project timesheet as a spreadsheet file (.xlsx).
+- **Main Success Scenario**:
+  1. The user enters the detail view page for a timesheet (Main page -> "Show").
+  2. The user clicks "Download".
+  3. The system generates and downloads the project timesheet as an Excel file.
+- **Exception Handling**:
+  - If the target download path is not configured to /User/Utente/Downloads, the system aborts the download to prevent file path errors. 
+- **System State upon Completion**:
+  - The user remains on the detailed project timesheet page with active navigation options. 
   
 ---
 
 ## Test
-Il sistema è stato testato in modo approfondito per verificarne il corretto funzionamento, in particolare sono stati condotti test di unità (unit test) e test di accettazione (acceptance test). Per realizzare i test sono stati utilizzati JUnit e Selenium.
+The application underwent thorough testing to ensure functional correctness, specifically incorporating Unit Tests and Acceptance Tests using JUnit and Selenium.
 
-Gli acceptance test sono stati pensati per essere svolti in un ordine ben preciso (denotato dai nomi dei test stessi) questo è stato fatto per simulare il normale utilizzo del sistema da parte di un utente generico, andando a ricreare specifiche sequenze di azioni e richieste. 
+Acceptance tests were designed to execute in a strict sequential order (reflected in their naming conventions). This sequence simulates real-world usage patterns by recreating end-to-end user workflows.
 
-**Nota:**
-- Per un corretto funzionamento dei test questi devono essere eseguiti in ordine e in modo atomico, in quanto tengono conto l'uno dell'altro.
+**Note:**
+- For reliable results, acceptance tests must be executed sequentially and atomically, as individual test states depend on preceding steps.
 
 ### Coverage
-Grazie ai test implementati la coverage raggiunta è:
-- per gli unit test:
-
+The test suite achieved the following code coverage metrics:
+- Unit Test Coverage:
    ![coverage_unit_test](Immagini/unit.jpg)
-  
-- per gli acceptance test:
-  
+ 
+- Acceptance Test Coverage::
   ![coverage_acceptance_test](Immagini/acceptance.jpg)
